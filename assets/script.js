@@ -19,13 +19,70 @@ const slides = [
 ];
 
 const [arrowLeft, arrowRight] = document.querySelectorAll(".arrow");
+const dotsEl = document.querySelector(".dots");
+const imgEl = document.querySelector("#banner img");
+const textEl = document.querySelector("#banner p");
 
-console.log(arrowLeft);
+createDot(dotsEl);
+
+let slideIndex = 0;
 
 arrowLeft.addEventListener("click", (e) => {
-  console.log("left");
+  if (slideIndex <= 0) {
+    slideIndex = slides.length - 1;
+  } else {
+    --slideIndex;
+  }
+
+  imgEl.setAttribute(
+    "src",
+    `./assets/images/slideshow/${slides[slideIndex].image}`
+  );
+
+  textEl.innerHTML = slides[slideIndex].tagLine;
+
+  [...dotsEl.children].forEach((el) => {
+    el.className = "dot";
+  });
+
+  dotsEl.children.item(slideIndex).className = "dot dot_selected";
 });
 
 arrowRight.addEventListener("click", () => {
-  console.log("right");
+  if (slideIndex >= slides.length - 1) {
+    slideIndex = 0;
+  } else {
+    ++slideIndex;
+  }
+
+  imgEl.setAttribute(
+    "src",
+    `./assets/images/slideshow/${slides[slideIndex].image}`
+  );
+
+  textEl.innerHTML = slides[slideIndex].tagLine;
+
+  [...dotsEl.children].forEach((el) => {
+    el.className = "dot";
+  });
+
+  dotsEl.children.item(slideIndex).className = "dot dot_selected";
 });
+
+/**
+ *
+ * @param {Element} element
+ */
+function createDot(element) {
+  for (let i = 0; i < slides.length; i++) {
+    const dot = document.createElement("div");
+
+    if (element.children.length <= 0) {
+      dot.classList.add("dot", "dot_selected");
+    } else {
+      dot.classList.add("dot");
+    }
+
+    element.appendChild(dot);
+  }
+}
