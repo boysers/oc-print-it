@@ -20,60 +20,28 @@ const slides = [
 
 const [arrowLeft, arrowRight] = document.querySelectorAll(".arrow");
 const dotsEl = document.querySelector(".dots");
-const imgEl = document.querySelector("#banner img");
-const textEl = document.querySelector("#banner p");
 
-createDot(dotsEl);
+let sliderIndex = 0;
 
-let slideIndex = 0;
+createDots(dotsEl);
 
-arrowLeft.addEventListener("click", (e) => {
-  if (slideIndex <= 0) {
-    slideIndex = slides.length - 1;
-  } else {
-    --slideIndex;
-  }
+arrowLeft.addEventListener("click", () => {
+  sliderIndex = sliderIndex <= 0 ? slides.length - 1 : --sliderIndex;
 
-  imgEl.setAttribute(
-    "src",
-    `./assets/images/slideshow/${slides[slideIndex].image}`
-  );
-
-  textEl.innerHTML = slides[slideIndex].tagLine;
-
-  [...dotsEl.children].forEach((el) => {
-    el.className = "dot";
-  });
-
-  dotsEl.children.item(slideIndex).className = "dot dot_selected";
+  activeDot();
 });
 
 arrowRight.addEventListener("click", () => {
-  if (slideIndex >= slides.length - 1) {
-    slideIndex = 0;
-  } else {
-    ++slideIndex;
-  }
+  sliderIndex = sliderIndex >= slides.length - 1 ? 0 : ++sliderIndex;
 
-  imgEl.setAttribute(
-    "src",
-    `./assets/images/slideshow/${slides[slideIndex].image}`
-  );
-
-  textEl.innerHTML = slides[slideIndex].tagLine;
-
-  [...dotsEl.children].forEach((el) => {
-    el.className = "dot";
-  });
-
-  dotsEl.children.item(slideIndex).className = "dot dot_selected";
+  activeDot();
 });
 
 /**
  *
  * @param {Element} element
  */
-function createDot(element) {
+function createDots(element) {
   for (let i = 0; i < slides.length; i++) {
     const dot = document.createElement("div");
 
@@ -85,4 +53,22 @@ function createDot(element) {
 
     element.appendChild(dot);
   }
+}
+
+function activeDot() {
+  const imgEl = document.querySelector("#banner img");
+  const textEl = document.querySelector("#banner p");
+
+  imgEl.setAttribute(
+    "src",
+    `./assets/images/slideshow/${slides[sliderIndex].image}`
+  );
+
+  textEl.innerHTML = slides[sliderIndex].tagLine;
+
+  [...dotsEl.children].forEach((el) => {
+    el.className = "dot";
+  });
+
+  dotsEl.children.item(sliderIndex).className = "dot dot_selected";
 }
