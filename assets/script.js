@@ -18,34 +18,73 @@ const slides = [
   },
 ];
 
-const [arrowLeft, arrowRight] = document.querySelectorAll(".arrow");
+/* ==== Carrousel ==== */
 const dotsEl = document.querySelector(".dots");
+const [arrowLeft, arrowRight] = document.querySelectorAll(".arrow");
 
-let sliderIndex = 0;
+let sliderId = 1; // Variable global de référence pour le slide actif en cours
 
-createDots(dotsEl);
+createDots(dotsEl, slides.length);
+
+// Permets d'écouter sur les dots et de sélectionner le slide que l'on souhaite
+dotsEl.addEventListener("click", (e) => {
+  e.preventDefault();
+
+  const dot = e.target.getAttribute("data-id");
+
+  if (!dot) return;
+
+  sliderId = Number(dot);
+
+  slider();
+});
 
 arrowLeft.addEventListener("click", () => {
-  sliderIndex = sliderIndex <= 0 ? slides.length - 1 : --sliderIndex;
+  sliderId = sliderId <= 1 ? slides.length : --sliderId;
 
   slider();
-});
+}); // Flêche de gauche du slider
 
 arrowRight.addEventListener("click", () => {
-  sliderIndex = sliderIndex >= slides.length - 1 ? 0 : ++sliderIndex;
+  sliderId = sliderId >= slides.length ? 1 : ++sliderId;
 
   slider();
-});
+}); // Flêche de droite du slider
 
 /**
- *
- * @param {Element} element
+ * Fonction de changement de slide
+ * Elle se sert de la variable de référence sliderIndex et de l'array slides
  */
-function createDots(element) {
-  for (let i = 0; i < slides.length; i++) {
+function slider() {
+  const imgEl = document.querySelector("#banner img");
+  const textEl = document.querySelector("#banner p");
+
+  const slideIndex = sliderId - 1;
+
+  imgEl.setAttribute(
+    "src",
+    `./assets/images/slideshow/${slides[slideIndex].image}`
+  );
+
+  textEl.innerHTML = slides[slideIndex].tagLine;
+
+  [...dotsEl.children].forEach((el) => {
+    el.className = "dot";
+  });
+
+  dotsEl.children.item(slideIndex).className = "dot dot_selected";
+}
+
+/**
+ * Créé les points (dots) et les ajoutes sur l'élément parent
+ * @param {Element} element // Element parent
+ * @param {number} length // Nombre de dot
+ */
+function createDots(element, length = 4) {
+  for (let i = 0; i < length; i++) {
     const dot = document.createElement("div");
 
-    dot.setAttribute("data-id", i)
+    dot.setAttribute("data-id", i + 1);
 
     if (element.children.length <= 0) {
       dot.classList.add("dot", "dot_selected");
@@ -55,30 +94,4 @@ function createDots(element) {
 
     element.appendChild(dot);
   }
-
-  element.addEventListener("click", (e) => {
-    e.preventDefault()
-
-    sliderIndex = Number(e.target.getAttribute("data-id"));
-
-    slider();
-  });
-}
-
-function slider() {
-  const imgEl = document.querySelector("#banner img");
-  const textEl = document.querySelector("#banner p");
-
-  imgEl.setAttribute(
-    "src",
-    `./assets/images/slideshow/${slides[sliderIndex].image}`
-  );
-
-  textEl.innerHTML = slides[sliderIndex].tagLine;
-
-  [...dotsEl.children].forEach((el) => {
-    el.className = "dot";
-  });
-
-  dotsEl.children.item(sliderIndex).className = "dot dot_selected";
 }
