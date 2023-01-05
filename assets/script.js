@@ -45,6 +45,8 @@ function createDots(element) {
   for (let i = 0; i < slides.length; i++) {
     const dot = document.createElement("div");
 
+    dot.setAttribute("data-id", i)
+
     if (element.children.length <= 0) {
       dot.classList.add("dot", "dot_selected");
     } else {
@@ -57,7 +59,7 @@ function createDots(element) {
   element.addEventListener("click", (e) => {
     e.preventDefault()
 
-    sliderIndex = i;
+    sliderIndex = Number(e.target.getAttribute("data-id"));
 
     slider();
   });
