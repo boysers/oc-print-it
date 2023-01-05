@@ -53,7 +53,7 @@ arrowRight.addEventListener("click", () => {
 
 /**
  * Fonction de changement de slide
- * Elle se sert de la variable de référence sliderIndex et de l'array slides
+ * Elle se sert de la variable de référence sliderId et de l'array slides
  */
 function slider() {
   const imgEl = document.querySelector("#banner img");
