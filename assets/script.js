@@ -28,13 +28,13 @@ createDots(dotsEl);
 arrowLeft.addEventListener("click", () => {
   sliderIndex = sliderIndex <= 0 ? slides.length - 1 : --sliderIndex;
 
-  activeDot();
+  slider();
 });
 
 arrowRight.addEventListener("click", () => {
   sliderIndex = sliderIndex >= slides.length - 1 ? 0 : ++sliderIndex;
 
-  activeDot();
+  slider();
 });
 
 /**
@@ -53,9 +53,17 @@ function createDots(element) {
 
     element.appendChild(dot);
   }
+
+  element.addEventListener("click", (e) => {
+    e.preventDefault()
+
+    sliderIndex = i;
+
+    slider();
+  });
 }
 
-function activeDot() {
+function slider() {
   const imgEl = document.querySelector("#banner img");
   const textEl = document.querySelector("#banner p");
 
