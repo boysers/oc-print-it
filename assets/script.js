@@ -69,10 +69,10 @@ function slider() {
   textEl.innerHTML = slides[slideIndex].tagLine;
 
   [...dotsEl.children].forEach((el) => {
-    el.className = "dot";
+    el.classList.remove("dot_selected");
   });
 
-  dotsEl.children.item(slideIndex).className = "dot dot_selected";
+  dotsEl.children.item(slideIndex).classList.add("dot_selected");
 }
 
 /**
@@ -80,13 +80,13 @@ function slider() {
  * @param {Element} element // Element parent
  * @param {number} length // Nombre de dot
  */
-function createDots(element, length = 4) {
-  for (let i = 0; i < length; i++) {
+function createDots(element, length) {
+  for (let i = 1; i <= length; i++) {
     const dot = document.createElement("div");
 
-    dot.setAttribute("data-id", i + 1);
+    dot.setAttribute("data-id", i);
 
-    if (element.children.length <= 0) {
+    if (element.children.length < 1) {
       dot.classList.add("dot", "dot_selected");
     } else {
       dot.classList.add("dot");
