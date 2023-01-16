@@ -1,6 +1,5 @@
 class Slider {
   slideIdActive = 1;
-  dotEls = [];
 
   constructor(slides, selector) {
     this.slides = slides;
@@ -8,30 +7,47 @@ class Slider {
 
     this.imgEl = document.querySelector(`${selector} > img`);
     this.textEl = document.querySelector(`${selector} > p`);
-    this.dotContainerEl = document.querySelector(`${selector} > .dots`);
 
+    // Arrows
     const [arrowLeft, arrowRight] = document.querySelectorAll(
       `${this.selector} > .arrow`
     );
     this.arrowLeftEl = arrowLeft;
     this.arrowRightEl = arrowRight;
 
-    this.handleClickArrowChangeSlideActive =
-      this.handleClickArrowChangeSlideActive.bind(this);
+    // Dots
+    this.dotContainerEl = document.querySelector(`${selector} > .dots`);
+    this.dotEls = this.slides.map((_, index) =>
+      this.createDotEl(++index, index === this.slideIdActive)
+    );
 
-    this.handleClickDotChangeSlideActive =
-      this.handleClickDotChangeSlideActive.bind(this);
+    // Events
+    this.onArrowChangeSlide = this.onArrowChangeSlide.bind(this);
+    this.onDotChangeSlide = this.onDotChangeSlide.bind(this);
+  }
+
+  createDotEl(id, active = false) {
+    const dotEl = document.createElement("div");
+
+    dotEl.setAttribute("data-slide", id);
+    dotEl.classList.add("dot");
+
+    if (active) dotEl.classList.add("dot_selected");
+
+    return dotEl;
   }
 
   slider() {
-    const slide = this.slides[this.slideIdActive - 1];
+    const { image, tagLine } = this.slides[this.slideIdActive - 1];
 
-    this.imgEl.setAttribute("src", `./assets/images/slideshow/${slide.image}`);
+    this.imgEl.setAttribute("src", `./assets/images/slideshow/${image}`);
 
-    this.textEl.innerHTML = slide.tagLine;
+    this.textEl.innerHTML = tagLine;
+  }
 
+  changeDotActive() {
     this.dotEls.forEach((dot) => {
-      if (dot.getAttribute("data-id") == this.slideIdActive) {
+      if (dot.getAttribute("data-slide") == this.slideIdActive) {
         dot.classList.add("dot_selected");
       } else {
         dot.classList.remove("dot_selected");
@@ -39,7 +55,7 @@ class Slider {
     });
   }
 
-  handleClickArrowChangeSlideActive(e) {
+  onArrowChangeSlide(e) {
     const arrow = e.target;
     const slidesLenght = this.slides.length;
 
@@ -51,49 +67,50 @@ class Slider {
         this.slideIdActive >= slidesLenght ? 1 : ++this.slideIdActive;
     } else return;
 
+    this.changeDotActive();
+
     this.slider();
   }
 
-  handleClickDotChangeSlideActive(e) {
-    const dotId = e.target.getAttribute("data-id");
+  onDotChangeSlide(e) {
+    const dotId = e.target.getAttribute("data-slide");
+
     this.slideIdActive = parseInt(dotId, 10);
 
+    this.changeDotActive();
+
     this.slider();
   }
 
-  createDotEl(id) {
-    const dot = document.createElement("div");
+  disable() {
+    this.arrowLeftEl.style.display = "none";
+    this.arrowLeftEl.removeEventListener("click", this.onArrowChangeSlide);
 
-    dot.setAttribute("data-id", id);
+    this.arrowRightEl.style.display = "none";
+    this.arrowRightEl.removeEventListener("click", this.onArrowChangeSlide);
 
-    dot.classList.add("dot");
-    if (this.dotEls.length < 1) dot.classList.add("dot_selected");
+    this.dotEls.forEach((dotEl) => {
+      dotEl.removeEventListener("click", this.onDotChangeSlide);
 
-    this.dotEls.push(dot);
-  }
-
-  insertDots(dotEls) {
-    dotEls.forEach((dotEl) => {
-      this.dotContainerEl.insertAdjacentElement("beforeend", dotEl);
+      this.dotContainerEl?.remove();
     });
+
+    this.slideIdActive = 1;
+
+    this.slider();
   }
 
   init() {
-    this.slides.forEach((_, index) => this.createDotEl(index + 1));
-    this.insertDots(this.dotEls);
+    this.arrowLeftEl.style.display = "block";
+    this.arrowLeftEl.addEventListener("click", this.onArrowChangeSlide);
 
-    this.arrowLeftEl.addEventListener(
-      "click",
-      this.handleClickArrowChangeSlideActive
-    );
+    this.arrowRightEl.style.display = "block";
+    this.arrowRightEl.addEventListener("click", this.onArrowChangeSlide);
 
-    this.arrowRightEl.addEventListener(
-      "click",
-      this.handleClickArrowChangeSlideActive
-    );
+    this.dotEls.forEach((dotEl) => {
+      this.dotContainerEl.insertAdjacentElement("beforeend", dotEl);
 
-    this.dotEls.forEach((dot) => {
-      dot.addEventListener("click", this.handleClickDotChangeSlideActive);
+      dotEl.addEventListener("click", this.onDotChangeSlide);
     });
   }
 }

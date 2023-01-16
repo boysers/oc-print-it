@@ -18,4 +18,10 @@ const slides = [
   },
 ];
 
-new Slider(slides, "#banner").init()
+const slider = new Slider(slides, "#banner");
+
+slider.init();
+
+setTimeout(() => {
+  slider.disable();
+}, 5_000);
