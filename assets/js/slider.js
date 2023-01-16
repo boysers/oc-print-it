@@ -43,6 +43,8 @@ class Slider {
     this.imgEl.setAttribute("src", `./assets/images/slideshow/${image}`);
 
     this.textEl.innerHTML = tagLine;
+
+    this.changeDotActive();
   }
 
   changeDotActive() {
@@ -67,8 +69,6 @@ class Slider {
         this.slideIdActive >= slidesLenght ? 1 : ++this.slideIdActive;
     } else return;
 
-    this.changeDotActive();
-
     this.slider();
   }
 
@@ -76,8 +76,6 @@ class Slider {
     const dotId = e.target.getAttribute("data-slide");
 
     this.slideIdActive = parseInt(dotId, 10);
-
-    this.changeDotActive();
 
     this.slider();
   }
