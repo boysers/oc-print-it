@@ -20,7 +20,7 @@ class Slider {
 
     // Dots
     this.dotContainerEl = document.querySelector(`${selector} > .dots`);
-    this.dotEls = this.slides.map((_, index) =>
+    this.dotEls = [...Array(this.slides.length)].map((_, index) =>
       this.createDotEl(++index, index === slideIdActive)
     );
 
