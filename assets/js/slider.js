@@ -7,6 +7,7 @@ class Slider {
   constructor(slides, selector, slideIdActive = 1) {
     this.slides = slides;
     this.slideIdActive = slideIdActive;
+    this.slideIdDefault = slideIdActive
 
     this.imgEl = document.querySelector(`${selector} > img`);
     this.textEl = document.querySelector(`${selector} > p`);
@@ -107,7 +108,7 @@ class Slider {
       this.dotContainerEl?.remove();
     });
 
-    this.slideIdActive = 1;
+    this.slideIdActive = this.slideIdDefault;
 
     this.slider();
   }
