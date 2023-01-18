@@ -6,7 +6,6 @@ class Slider {
    */
   constructor(slides, selector, slideIdActive = 1) {
     this.slides = slides;
-    this.selector = selector;
     this.slideIdActive = slideIdActive;
 
     this.imgEl = document.querySelector(`${selector} > img`);
@@ -14,7 +13,7 @@ class Slider {
 
     // Arrows
     const [arrowLeft, arrowRight] = document.querySelectorAll(
-      `${this.selector} > .arrow`
+      `${selector} > .arrow`
     );
     this.arrowLeftEl = arrowLeft;
     this.arrowRightEl = arrowRight;
@@ -22,7 +21,7 @@ class Slider {
     // Dots
     this.dotContainerEl = document.querySelector(`${selector} > .dots`);
     this.dotEls = this.slides.map((_, index) =>
-      this.createDotEl(++index, index === this.slideIdActive)
+      this.createDotEl(++index, index === slideIdActive)
     );
 
     // Events
