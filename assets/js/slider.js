@@ -1,9 +1,13 @@
 class Slider {
-  slideIdActive = 1;
-
-  constructor(slides, selector) {
+  /**
+   * @param {{image: string; tagLine: string;}[]} slides
+   * @param {string} selector
+   * @param {number} slideIdActive
+   */
+  constructor(slides, selector, slideIdActive = 1) {
     this.slides = slides;
     this.selector = selector;
+    this.slideIdActive = slideIdActive;
 
     this.imgEl = document.querySelector(`${selector} > img`);
     this.textEl = document.querySelector(`${selector} > p`);
@@ -26,6 +30,11 @@ class Slider {
     this.onDotChangeSlide = this.onDotChangeSlide.bind(this);
   }
 
+  /**
+   * @param {number} id
+   * @param {boolean} active
+   * @returns {HTMLDivElement}
+   */
   createDotEl(id, active = false) {
     const dotEl = document.createElement("div");
 
@@ -57,6 +66,9 @@ class Slider {
     });
   }
 
+  /**
+   * @param {MouseEvent} e
+   */
   onArrowChangeSlide(e) {
     const arrow = e.target;
     const slidesLenght = this.slides.length;
@@ -72,6 +84,9 @@ class Slider {
     this.slider();
   }
 
+  /**
+   * @param {MouseEvent} e
+   */
   onDotChangeSlide(e) {
     const dotId = e.target.getAttribute("data-slide");
 
@@ -81,10 +96,10 @@ class Slider {
   }
 
   disable() {
-    this.arrowLeftEl.style.display = "none";
+    this.arrowLeftEl.classList.add("disable");
     this.arrowLeftEl.removeEventListener("click", this.onArrowChangeSlide);
 
-    this.arrowRightEl.style.display = "none";
+    this.arrowRightEl.classList.add("disable");
     this.arrowRightEl.removeEventListener("click", this.onArrowChangeSlide);
 
     this.dotEls.forEach((dotEl) => {
@@ -99,10 +114,10 @@ class Slider {
   }
 
   init() {
-    this.arrowLeftEl.style.display = "block";
+    this.arrowLeftEl.classList.remove("disable");
     this.arrowLeftEl.addEventListener("click", this.onArrowChangeSlide);
 
-    this.arrowRightEl.style.display = "block";
+    this.arrowRightEl.classList.remove("disable");
     this.arrowRightEl.addEventListener("click", this.onArrowChangeSlide);
 
     this.dotEls.forEach((dotEl) => {
@@ -110,5 +125,7 @@ class Slider {
 
       dotEl.addEventListener("click", this.onDotChangeSlide);
     });
+
+    this.slider();
   }
 }

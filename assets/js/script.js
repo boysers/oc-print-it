@@ -18,7 +18,7 @@ const slides = [
   },
 ];
 
-const slider = new Slider(slides, "#banner");
+const slider = new Slider(slides, "#banner", 2);
 
 slider.init();
 
